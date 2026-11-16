@@ -1,7 +1,7 @@
 import os
 import shutil
 import json
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Union
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator
 
@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     DB_ECHO: bool = False
 
     # CORS
-    CORS_ORIGINS: List[str] = [
+    CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
