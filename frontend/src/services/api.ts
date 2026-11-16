@@ -83,6 +83,60 @@ export const api = {
     return response.json();
   },
 
+  async predictLakeAi(lakeId: string, scenario: string = 'status_quo', targetYear: number = 2030): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/lakes/${lakeId}/ai-predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scenario, target_year: targetYear })
+    });
+    if (!response.ok) throw new Error('Failed to compute AI digital twin prediction');
+    return response.json();
+  },
+
+  async getResearchExperiments(lakeId: string = 'lake-bellandur'): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/research/experiments?lake_id=${lakeId}`);
+    if (!response.ok) throw new Error('Failed to fetch research experiments');
+    return response.json();
+  },
+
+  async getModelMetrics(): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/research/model-metrics`);
+    if (!response.ok) throw new Error('Failed to fetch model metrics');
+    return response.json();
+  },
+
+  async getKarnatakaOverview(): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/research/karnataka-overview`);
+    if (!response.ok) throw new Error('Failed to fetch Karnataka overview');
+    return response.json();
+  },
+
+  async getLakeSarAcquisitions(lakeId: string): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/sar/${lakeId}/acquisitions`);
+    if (!response.ok) throw new Error(`Failed to fetch SAR acquisitions for ${lakeId}`);
+    return response.json();
+  },
+
+  async classifyLakeSar(lakeId: string, year: number): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/sar/${lakeId}/classify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ year })
+    });
+    if (!response.ok) throw new Error('Failed to run Random Forest classification');
+    return response.json();
+  },
+
+  async compareLakeSar(lakeId: string, histYear: number, recentYear: number): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/sar/${lakeId}/compare`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ historical_year: histYear, recent_year: recentYear })
+    });
+    if (!response.ok) throw new Error('Failed to compare SAR observation periods');
+    return response.json();
+  },
+
   getReportHtmlUrl(lakeId: string, olderId?: string, newerId?: string): string {
     const params = new URLSearchParams();
     if (olderId) params.append('older_obs_id', olderId);

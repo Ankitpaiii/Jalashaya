@@ -14,14 +14,20 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '../stores/useAppStore';
 
-// GEE & Satellite Tile Sources by Year
-const SATELLITE_YEAR_TILES: Record<string, string> = {
-  '2017': 'https://earthengine.googleapis.com/v1/projects/lofty-voyage-514704-s5/maps/a8627d48c6f5b5770d0a6caee378b758-f342b72bc846fed06e5b377eeeb1778d/tiles/{z}/{x}/{y}',
-  '2019': 'https://earthengine.googleapis.com/v1/projects/lofty-voyage-514704-s5/maps/e4fd1c803cb99632c055db244f332f81-82d54ebf1d65ef66f5e0fd3ba85eccde/tiles/{z}/{x}/{y}',
-  '2021': 'https://earthengine.googleapis.com/v1/projects/lofty-voyage-514704-s5/maps/4672992e2608c7723bf2d4ae0a19f8f1-d97bbbc563ed8b4b550b750010d39eff/tiles/{z}/{x}/{y}',
-  '2023': 'https://earthengine.googleapis.com/v1/projects/lofty-voyage-514704-s5/maps/515bc66b96e4617167c1d9fa967d020b-9828741dc7d78bd99c07e50c468864b0/tiles/{z}/{x}/{y}',
-  '2024': 'https://earthengine.googleapis.com/v1/projects/lofty-voyage-514704-s5/maps/0e703e567f846f665fe9887974793aac-813199d4a413cbaeea7990a6af498696/tiles/{z}/{x}/{y}',
-  '2026': 'https://earthengine.googleapis.com/v1/projects/lofty-voyage-514704-s5/maps/0e703e567f846f665fe9887974793aac-813199d4a413cbaeea7990a6af498696/tiles/{z}/{x}/{y}'
+// Live Copernicus Sentinel-2 Cloudless WMTS Tiles (EOX / European Space Agency)
+// High-resolution multi-spectral optical imagery for Bengaluru, calibrated year-by-year
+export const SENTINEL2_YEAR_TILES: Record<string, string> = {
+  '2016': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg',
+  '2017': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/{z}/{y}/{x}.jpg',
+  '2018': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2018_3857/default/g/{z}/{y}/{x}.jpg',
+  '2019': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2019_3857/default/g/{z}/{y}/{x}.jpg',
+  '2020': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg',
+  '2021': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2021_3857/default/g/{z}/{y}/{x}.jpg',
+  '2022': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2022_3857/default/g/{z}/{y}/{x}.jpg',
+  '2023': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2023_3857/default/g/{z}/{y}/{x}.jpg',
+  '2024': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg',
+  '2025': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg',
+  '2026': 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg'
 };
 
 // Multi-host parallel tile URLs for fastest concurrent downloads
@@ -66,7 +72,9 @@ export const GeospatialMap: React.FC = () => {
     showSatelliteOverlay,
     setShowSatelliteOverlay,
     satelliteProvider,
-    setSatelliteProvider
+    setSatelliteProvider,
+    isHuman3DView,
+    toggleHuman3DView
   } = useAppStore();
 
   const currentObservation = observations[selectedObservationIndex] || null;
@@ -102,35 +110,68 @@ export const GeospatialMap: React.FC = () => {
             maxzoom: 20,
             attribution: '© Esri, Maxar'
           },
-          'gee-2017': {
+          'sentinel-2017': {
             type: 'raster',
-            tiles: [SATELLITE_YEAR_TILES['2017']],
-            tileSize: 256
+            tiles: [SENTINEL2_YEAR_TILES['2017']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2017)'
           },
-          'gee-2019': {
+          'sentinel-2018': {
             type: 'raster',
-            tiles: [SATELLITE_YEAR_TILES['2019']],
-            tileSize: 256
+            tiles: [SENTINEL2_YEAR_TILES['2018']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2018)'
           },
-          'gee-2021': {
+          'sentinel-2019': {
             type: 'raster',
-            tiles: [SATELLITE_YEAR_TILES['2021']],
-            tileSize: 256
+            tiles: [SENTINEL2_YEAR_TILES['2019']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2019)'
           },
-          'gee-2023': {
+          'sentinel-2020': {
             type: 'raster',
-            tiles: [SATELLITE_YEAR_TILES['2023']],
-            tileSize: 256
+            tiles: [SENTINEL2_YEAR_TILES['2020']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2020)'
           },
-          'gee-2024': {
+          'sentinel-2021': {
             type: 'raster',
-            tiles: [SATELLITE_YEAR_TILES['2024']],
-            tileSize: 256
+            tiles: [SENTINEL2_YEAR_TILES['2021']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2021)'
           },
-          'gee-2026': {
+          'sentinel-2022': {
             type: 'raster',
-            tiles: [SATELLITE_YEAR_TILES['2026']],
-            tileSize: 256
+            tiles: [SENTINEL2_YEAR_TILES['2022']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2022)'
+          },
+          'sentinel-2023': {
+            type: 'raster',
+            tiles: [SENTINEL2_YEAR_TILES['2023']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2023)'
+          },
+          'sentinel-2024': {
+            type: 'raster',
+            tiles: [SENTINEL2_YEAR_TILES['2024']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2024)'
+          },
+          'sentinel-2026': {
+            type: 'raster',
+            tiles: [SENTINEL2_YEAR_TILES['2026']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2026)'
           },
           'esri-labels': {
             type: 'raster',
@@ -139,14 +180,14 @@ export const GeospatialMap: React.FC = () => {
           }
         },
         layers: [
-          // Base Satellite Layer: Google Maps Hybrid (Ultra-Crisp Sub-Meter 2026)
+          // Base Satellite Layer: Google Maps Hybrid (Ultra-Crisp Sub-Meter)
           {
             id: 'base-google-satellite',
             type: 'raster',
             source: 'google-satellite',
             minzoom: 0,
             maxzoom: 22,
-            layout: { visibility: 'visible' },
+            layout: { visibility: 'none' },
             paint: {
               'raster-resampling': 'linear',
               'raster-contrast': 0.08,
@@ -167,42 +208,132 @@ export const GeospatialMap: React.FC = () => {
               'raster-saturation': 0.15
             }
           },
-          // Multi-Temporal Sentinel-2 True-Color Layers
+          // Authentic Multi-Temporal Copernicus Sentinel-2 Satellite Layers (100% Opacity)
           {
-            id: 'layer-gee-2017',
+            id: 'layer-sentinel-2017',
             type: 'raster',
-            source: 'gee-2017',
-            layout: { visibility: 'none' }
+            source: 'sentinel-2017',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
           },
           {
-            id: 'layer-gee-2019',
+            id: 'layer-sentinel-2018',
             type: 'raster',
-            source: 'gee-2019',
-            layout: { visibility: 'none' }
+            source: 'sentinel-2018',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
           },
           {
-            id: 'layer-gee-2021',
+            id: 'layer-sentinel-2019',
             type: 'raster',
-            source: 'gee-2021',
-            layout: { visibility: 'none' }
+            source: 'sentinel-2019',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
           },
           {
-            id: 'layer-gee-2023',
+            id: 'layer-sentinel-2020',
             type: 'raster',
-            source: 'gee-2023',
-            layout: { visibility: 'none' }
+            source: 'sentinel-2020',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
           },
           {
-            id: 'layer-gee-2024',
+            id: 'layer-sentinel-2021',
             type: 'raster',
-            source: 'gee-2024',
-            layout: { visibility: 'none' }
+            source: 'sentinel-2021',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
           },
           {
-            id: 'layer-gee-2026',
+            id: 'layer-sentinel-2022',
             type: 'raster',
-            source: 'gee-2026',
-            layout: { visibility: 'none' }
+            source: 'sentinel-2022',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
+          },
+          {
+            id: 'layer-sentinel-2023',
+            type: 'raster',
+            source: 'sentinel-2023',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
+          },
+          {
+            id: 'layer-sentinel-2024',
+            type: 'raster',
+            source: 'sentinel-2024',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'none' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
+          },
+          {
+            id: 'layer-sentinel-2026',
+            type: 'raster',
+            source: 'sentinel-2026',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'visible' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
           },
           {
             id: 'labels-layer',
@@ -499,18 +630,19 @@ export const GeospatialMap: React.FC = () => {
       style: {
         version: 8,
         sources: {
+          'sentinel-2017-baseline': {
+            type: 'raster',
+            tiles: [SENTINEL2_YEAR_TILES['2017']],
+            tileSize: 256,
+            maxzoom: 15,
+            attribution: '© Copernicus Sentinel-2 (2017 Baseline)'
+          },
           'google-satellite-before': {
             type: 'raster',
             tiles: GOOGLE_SATELLITE_TILES,
             tileSize: 256,
             maxzoom: 20,
             attribution: '© Google Maps'
-          },
-          'gee-2017-baseline': {
-            type: 'raster',
-            tiles: [SATELLITE_YEAR_TILES['2017']],
-            tileSize: 256,
-            attribution: 'Sentinel-2 2017 Baseline'
           },
           'esri-labels-before': {
             type: 'raster',
@@ -535,35 +667,33 @@ export const GeospatialMap: React.FC = () => {
           }
         },
         layers: [
+          // Authentic Copernicus Sentinel-2 2017 Baseline Imagery (100% Opacity)
+          {
+            id: 'before-sentinel-satellite',
+            type: 'raster',
+            source: 'sentinel-2017-baseline',
+            minzoom: 0,
+            maxzoom: 22,
+            layout: { visibility: 'visible' },
+            paint: {
+              'raster-resampling': 'linear',
+              'raster-opacity': 1.0,
+              'raster-contrast': 0.08,
+              'raster-saturation': 0.15
+            }
+          },
           {
             id: 'before-base-satellite',
             type: 'raster',
             source: 'google-satellite-before',
             minzoom: 0,
             maxzoom: 22,
-            layout: { visibility: 'visible' },
+            layout: { visibility: 'none' },
             paint: {
               'raster-resampling': 'linear',
               'raster-contrast': 0.05,
               'raster-saturation': 0.35,
               'raster-hue-rotate': -16
-            }
-          },
-          {
-            id: 'before-satellite',
-            type: 'raster',
-            source: 'gee-2017-baseline',
-            layout: { visibility: showSatelliteOverlay ? 'visible' : 'none' },
-            paint: {
-              'raster-opacity': [
-                'interpolate',
-                ['linear'],
-                ['zoom'],
-                10, 0.35,
-                13.0, 0.20,
-                14.2, 0.0
-              ],
-              'raster-resampling': 'linear'
             }
           },
           {
@@ -639,73 +769,67 @@ export const GeospatialMap: React.FC = () => {
     const map = mapMainRef.current;
     if (!map.isStyleLoaded()) return;
 
-    const years = ['2017', '2019', '2021', '2023', '2024', '2026'];
-    years.forEach((y) => {
-      const layerId = `layer-gee-${y}`;
-      if (map.getLayer(layerId)) {
-        const isTarget = y === currentYear && showSatelliteOverlay;
-        map.setLayoutProperty(layerId, 'visibility', isTarget ? 'visible' : 'none');
-        if (isTarget) {
-          // Smooth zoom interpolation: visible at regional overview, fades out at zoom > 14 so high-res Google Satellite is 100% clear
-          map.setPaintProperty(layerId, 'raster-opacity', [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            10, 0.35,
-            13.0, 0.20,
-            14.2, 0.0
-          ]);
-        }
-      }
-    });
-
-    // Base satellite provider selection (Google Maps Ultra-HD vs Esri Maxar)
-    // Dynamic era-specific photographic treatment: 2017 pristine green canopy vs contemporary concrete sprawl
+    const sentinelYears = ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2026'];
     const showBase = layers.satellite;
-    if (map.getLayer('base-google-satellite')) {
-      map.setLayoutProperty(
-        'base-google-satellite',
-        'visibility',
-        showBase && satelliteProvider === 'google' ? 'visible' : 'none'
-      );
-      if (currentYear === '2017') {
-        map.setPaintProperty('base-google-satellite', 'raster-hue-rotate', -16);
-        map.setPaintProperty('base-google-satellite', 'raster-saturation', 0.35);
-        map.setPaintProperty('base-google-satellite', 'raster-contrast', 0.05);
-      } else if (currentYear === '2019' || currentYear === '2021') {
-        map.setPaintProperty('base-google-satellite', 'raster-hue-rotate', -8);
-        map.setPaintProperty('base-google-satellite', 'raster-saturation', 0.15);
-        map.setPaintProperty('base-google-satellite', 'raster-contrast', 0.10);
-      } else {
-        map.setPaintProperty('base-google-satellite', 'raster-hue-rotate', 0);
-        map.setPaintProperty('base-google-satellite', 'raster-saturation', -0.05);
-        map.setPaintProperty('base-google-satellite', 'raster-contrast', 0.18);
+
+    if (satelliteProvider === 'sentinel') {
+      // 1. Hide commercial satellite basemaps
+      if (map.getLayer('base-google-satellite')) {
+        map.setLayoutProperty('base-google-satellite', 'visibility', 'none');
       }
-    }
-    if (map.getLayer('base-esri-satellite')) {
-      map.setLayoutProperty(
-        'base-esri-satellite',
-        'visibility',
-        showBase && satelliteProvider === 'esri' ? 'visible' : 'none'
-      );
-      if (currentYear === '2017') {
-        map.setPaintProperty('base-esri-satellite', 'raster-hue-rotate', -16);
-        map.setPaintProperty('base-esri-satellite', 'raster-saturation', 0.30);
-      } else {
-        map.setPaintProperty('base-esri-satellite', 'raster-hue-rotate', 0);
-        map.setPaintProperty('base-esri-satellite', 'raster-saturation', 0.0);
+      if (map.getLayer('base-esri-satellite')) {
+        map.setLayoutProperty('base-esri-satellite', 'visibility', 'none');
+      }
+
+      // 2. Display the authentic Copernicus Sentinel-2 Cloudless imagery for currentYear at 100% opacity
+      sentinelYears.forEach((y) => {
+        const layerId = `layer-sentinel-${y}`;
+        if (map.getLayer(layerId)) {
+          const isTarget = y === currentYear;
+          map.setLayoutProperty(layerId, 'visibility', isTarget && showBase ? 'visible' : 'none');
+          if (isTarget) {
+            map.setPaintProperty(layerId, 'raster-opacity', 1.0);
+          }
+        }
+      });
+    } else if (satelliteProvider === 'google') {
+      // Hide all Sentinel layers
+      sentinelYears.forEach((y) => {
+        const layerId = `layer-sentinel-${y}`;
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, 'visibility', 'none');
+        }
+      });
+      if (map.getLayer('base-esri-satellite')) {
+        map.setLayoutProperty('base-esri-satellite', 'visibility', 'none');
+      }
+      if (map.getLayer('base-google-satellite')) {
+        map.setLayoutProperty('base-google-satellite', 'visibility', showBase ? 'visible' : 'none');
+        map.setPaintProperty('base-google-satellite', 'raster-opacity', 1.0);
+      }
+    } else if (satelliteProvider === 'esri') {
+      // Hide all Sentinel layers
+      sentinelYears.forEach((y) => {
+        const layerId = `layer-sentinel-${y}`;
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, 'visibility', 'none');
+        }
+      });
+      if (map.getLayer('base-google-satellite')) {
+        map.setLayoutProperty('base-google-satellite', 'visibility', 'none');
+      }
+      if (map.getLayer('base-esri-satellite')) {
+        map.setLayoutProperty('base-esri-satellite', 'visibility', showBase ? 'visible' : 'none');
+        map.setPaintProperty('base-esri-satellite', 'raster-opacity', 1.0);
       }
     }
 
-    // Single source of truth for map labels:
-    // When using Google Hybrid ('google'), Google already includes crisp integrated road vectors & place names.
-    // Esri reference labels ('labels-layer') are ONLY rendered when provider is Esri and layers.labels is enabled,
-    // completely preventing duplicate roads or overlapping text from merging!
+    // Map labels: render when enabled
     if (map.getLayer('labels-layer')) {
-      const showEsriLabels = layers.labels && satelliteProvider === 'esri';
-      map.setLayoutProperty('labels-layer', 'visibility', showEsriLabels ? 'visible' : 'none');
+      const showLabels = layers.labels && (satelliteProvider === 'esri' || satelliteProvider === 'sentinel');
+      map.setLayoutProperty('labels-layer', 'visibility', showLabels ? 'visible' : 'none');
     }
-  }, [currentYear, showSatelliteOverlay, layers.satellite, layers.labels, satelliteProvider]);
+  }, [currentYear, layers.satellite, layers.labels, satelliteProvider]);
 
   // 4. Update Encroachment Mask Opacity
   useEffect(() => {
@@ -1029,129 +1153,16 @@ export const GeospatialMap: React.FC = () => {
         </>
       )}
 
-      {/* Dynamic Multi-Temporal Era Callout Banner (2017 Baseline vs Contemporary Observation) */}
-      {!isSwipeMode && selectedLake && (
-        <div className="absolute top-[108px] left-1/2 -translate-x-1/2 z-20 pointer-events-auto flex items-center space-x-2.5">
-          {isBaseline2017 ? (
-            <div className="bg-emerald-950/85 backdrop-blur-md border border-emerald-500/50 text-white rounded-full px-4 py-1.5 text-xs shadow-xl flex items-center space-x-2 animate-in fade-in slide-in-from-top-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-bold text-emerald-300">🌿 2017 Baseline State:</span>
-              <span className="font-mono text-emerald-100">{currentArea.toFixed(1)} ha Pristine Natural Water Spread</span>
-              <span className="text-emerald-300 font-mono text-[11px] bg-emerald-900/60 px-2 py-0.5 rounded-full border border-emerald-700/50">
-                ✓ 0 ha Encroached (100% Intact)
-              </span>
-            </div>
-          ) : (
-            <div className="bg-slate-900/90 backdrop-blur-md border border-red-500/50 text-white rounded-full px-4 py-1.5 text-xs shadow-xl flex items-center space-x-2.5 animate-in fade-in slide-in-from-top-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
-              <span className="font-bold text-red-400">⚠️ {currentYear} State:</span>
-              <span className="font-mono text-slate-200">{currentArea.toFixed(1)} ha Active Water</span>
-              <span className="text-red-300 font-mono font-bold bg-red-950/80 px-2.5 py-0.5 rounded-full border border-red-700/60">
-                -{lostArea.toFixed(1)} ha Lost to Encroachment ({changePct.toFixed(1)}% Shrunk)
-              </span>
-              <button
-                onClick={() => setIsSwipeMode(true)}
-                className="ml-1 text-[11px] text-sky-400 hover:text-sky-300 underline font-semibold cursor-pointer"
-                title="Launch split-screen curtain swipe to compare 2017 with this observation"
-              >
-                Curtain Swipe ⇹
-              </button>
-            </div>
-          )}
+      {/* 3D Human Road Perspective Status Badge */}
+      {isHuman3DView && selectedLake && !isSwipeMode && (
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20 pointer-events-none bg-slate-900/90 backdrop-blur-md text-white border border-amber-500/50 rounded-full px-4 py-1.5 text-xs shadow-xl flex items-center space-x-2 animate-in fade-in slide-in-from-top-2">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+          <span className="font-bold text-amber-300">🚶‍♂️ 3D Human Road Perspective:</span>
+          <span className="font-mono text-slate-200">Pitch 68° • Sub-meter Street Level ({selectedLake.official_name})</span>
         </div>
       )}
 
-      {/* Satellite Visual Difference Control Toolbar (Floating Below Header, Center) */}
-      <div className="absolute top-[62px] left-1/2 -translate-x-1/2 z-30 pointer-events-auto bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-xl px-3 py-1.5 shadow-md flex items-center space-x-3 text-xs text-slate-800">
-        {/* Map Provider Toggle (Google Maps vs Esri) */}
-        <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px] font-semibold">
-          <button
-            onClick={() => setSatelliteProvider('google')}
-            className={`px-2 py-0.5 rounded-md transition-all flex items-center gap-1 ${
-              satelliteProvider === 'google'
-                ? 'bg-white text-emerald-700 shadow-sm font-bold'
-                : 'text-slate-500 hover:text-slate-900'
-            }`}
-            title="Google Maps Ultra-HD Hybrid Satellite (High-Res 2026 aerial)"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>Google HD</span>
-          </button>
-          <button
-            onClick={() => setSatelliteProvider('esri')}
-            className={`px-2 py-0.5 rounded-md transition-all flex items-center gap-1 ${
-              satelliteProvider === 'esri'
-                ? 'bg-white text-sky-700 shadow-sm font-bold'
-                : 'text-slate-500 hover:text-slate-900'
-            }`}
-            title="Esri World Imagery (Maxar 30cm)"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
-            <span>Esri Maxar</span>
-          </button>
-        </div>
 
-        {/* 1-Click Fast Direct Google Maps Link */}
-        <a
-          href={
-            selectedLake
-              ? `https://www.google.com/maps/@${selectedLake.latitude},${selectedLake.longitude},16z/data=!3m1!1e3`
-              : 'https://www.google.com/maps/@12.9716,77.5946,12z/data=!3m1!1e3'
-          }
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-semibold transition-all shadow-xs"
-          title="Open in official Google Maps for Street View and high-res satellite"
-        >
-          <span>🌐 Maps ↗</span>
-        </a>
-
-        <span className="text-slate-300">|</span>
-
-        {/* Swipe Mode Toggle Button */}
-        <button
-          onClick={() => setIsSwipeMode(!isSwipeMode)}
-          className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg font-semibold transition-all ${isSwipeMode
-            ? 'bg-sky-600 text-white shadow-sm font-bold'
-            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            }`}
-          title="Toggle Split-Screen Swipe Curtain to compare 2017 vs 2026 satellite photos"
-        >
-          <SplitSquareVertical className="w-3.5 h-3.5" />
-          <span>{isSwipeMode ? 'Exit Swipe' : '🛰️ Satellite Swipe Curtain'}</span>
-        </button>
-
-        <span className="text-slate-300">|</span>
-
-        {/* Satellite Imagery Year Indicator */}
-        <div className="flex items-center space-x-1.5 text-[11px]">
-          <Calendar className="w-3 h-3 text-sky-600" />
-          <span className="text-slate-500 hidden sm:inline">Orbit:</span>
-          <span className="font-mono font-bold text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">
-            {isSwipeMode ? '2017 ◀ ▶ 2026' : `${currentYear} Sentinel-2`}
-          </span>
-        </div>
-
-        <span className="text-slate-300">|</span>
-
-        {/* Encroachment Mask Opacity Slider */}
-        <div className="flex items-center space-x-1.5 text-[11px]">
-          <span className="text-slate-500 hidden sm:inline">Mask:</span>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={maskOpacity}
-            onChange={(e) => setMaskOpacity(parseFloat(e.target.value))}
-            className="w-16 accent-red-600 cursor-pointer h-1.5 bg-slate-200 rounded"
-            title="Adjust opacity to see houses and roads beneath the red encroachment overlay"
-          />
-          <span className="font-mono text-red-600 font-bold w-6 text-right text-[10px]">
-            {Math.round(maskOpacity * 100)}%
-          </span>
-        </div>
-      </div>
     </div>
   );
 };

@@ -46,9 +46,14 @@ def get_html_report(
     )
 
     lake_info = {
+        "id": lake.id,
+        "official_name": lake.official_name,
         "area_hectares": lake.area_hectares,
         "custodian": lake.custodian,
-        "zone": lake.administrative_zone
+        "zone": lake.administrative_zone,
+        "latitude": lake.latitude,
+        "longitude": lake.longitude,
+        "boundary_geometry": lake.boundary_geometry,
     }
 
     html = report_generator.generate_html_report(comparison, lake_info)

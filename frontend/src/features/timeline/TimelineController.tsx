@@ -8,7 +8,9 @@ export const TimelineController: React.FC = () => {
     selectedObservationIndex,
     setSelectedObservationIndex,
     selectedLake,
-    comparisonData
+    comparisonData,
+    maskOpacity,
+    setMaskOpacity
   } = useAppStore();
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -57,6 +59,23 @@ export const TimelineController: React.FC = () => {
           <span className="w-3 border-t-2 border-dashed border-sky-500" />
           <span className="text-slate-500">Cadastral Basin</span>
         </span>
+        <span className="text-slate-300">|</span>
+        <div className="flex items-center space-x-1.5 text-[11px]">
+          <span className="text-slate-500 font-sans">Mask:</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={maskOpacity}
+            onChange={(e) => setMaskOpacity(parseFloat(e.target.value))}
+            className="w-14 accent-red-600 cursor-pointer h-1.5 bg-slate-200 rounded"
+            title="Adjust opacity to see houses and roads beneath the red encroachment overlay"
+          />
+          <span className="font-mono text-red-600 font-bold w-6 text-right text-[10px]">
+            {Math.round(maskOpacity * 100)}%
+          </span>
+        </div>
       </div>
 
       {/* Main Timeline Card */}

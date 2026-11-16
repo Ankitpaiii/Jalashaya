@@ -15,7 +15,8 @@ import {
   CheckCircle2,
   TrendingDown,
   Calendar,
-  ExternalLink
+  ExternalLink,
+  Zap
 } from 'lucide-react';
 import { useAppStore } from '../../stores/useAppStore';
 
@@ -34,7 +35,10 @@ export const LakeTelemetryCard: React.FC = () => {
     setIsTelemetryOpen,
     satelliteProvider,
     setSatelliteProvider,
-    runComparison
+    runComparison,
+    setIsPredictionModalOpen,
+    isHuman3DView,
+    toggleHuman3DView
   } = useAppStore();
 
   const [activeTab, setActiveTab] = useState<'metrics' | 'layers'>('metrics');
@@ -88,7 +92,7 @@ export const LakeTelemetryCard: React.FC = () => {
   const thresholdY = chartHeight - padY - (thresholdAreaVal / maxArea) * (chartHeight - 2 * padY);
 
   return (
-    <aside className="absolute top-[62px] right-4 z-30 pointer-events-auto">
+    <aside className="absolute top-[66px] right-4 z-30 pointer-events-auto">
       {/* 1. Minimized Pill */}
       {!isTelemetryOpen ? (
         <button
@@ -107,7 +111,7 @@ export const LakeTelemetryCard: React.FC = () => {
         </button>
       ) : (
         /* 2. Expanded Detail Card in Clean Light Theme */
-        <div className="w-80 sm:w-96 bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        <div className="w-80 sm:w-96 max-h-[calc(100vh-160px)] flex flex-col bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
           {/* Header */}
           <div className="p-3.5 border-b border-slate-100 flex items-start justify-between bg-slate-50/70">
             <div>
@@ -332,6 +336,17 @@ export const LakeTelemetryCard: React.FC = () => {
                   <span className="font-medium text-slate-700">Aerial Imagery Provider</span>
                   <div className="flex items-center bg-white p-0.5 rounded-md border border-slate-200 text-[10px]">
                     <button
+                      onClick={() => setSatelliteProvider('sentinel')}
+                      className={`px-2 py-0.5 rounded transition-all font-semibold ${
+                        satelliteProvider === 'sentinel'
+                          ? 'bg-sky-600 text-white shadow-xs'
+                          : 'text-slate-500 hover:text-slate-800'
+                      }`}
+                      title="Copernicus Sentinel-2 Multi-Spectral Optical Imagery"
+                    >
+                      Sentinel-2
+                    </button>
+                    <button
                       onClick={() => setSatelliteProvider('google')}
                       className={`px-2 py-0.5 rounded transition-all font-semibold ${
                         satelliteProvider === 'google'
@@ -385,8 +400,20 @@ export const LakeTelemetryCard: React.FC = () => {
               </div>
             )}
 
+            {/* Groq AI Future Simulation Button */}
+            <div className="pt-2 border-t border-slate-100">
+              <button
+                onClick={() => setIsPredictionModalOpen(true)}
+                className="w-full py-2 px-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-bold rounded-xl text-center transition-all flex items-center justify-center space-x-1.5 shadow-sm shadow-orange-500/20 text-xs cursor-pointer"
+                title="Run Groq LPU hydro-ecological prediction simulation for this lake"
+              >
+                <Zap className="w-3.5 h-3.5 fill-current" />
+                <span>⚡ Groq AI Simulation & Predict</span>
+              </button>
+            </div>
+
             {/* Quick Action Footer Buttons */}
-            <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-100 text-xs">
+            <div className="grid grid-cols-3 gap-1.5 pt-1.5 text-xs">
               <button
                 onClick={() => {
                   if (observations.length >= 2) {
@@ -403,10 +430,12 @@ export const LakeTelemetryCard: React.FC = () => {
                 <span>Comparison</span>
               </button>
               <button
-                onClick={() => setActiveScreen('restoration-lab')}
-                className="py-1.5 px-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-center font-semibold transition-colors"
+                onClick={() => setIsPredictionModalOpen(true)}
+                className="py-1.5 px-2 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 text-amber-800 border border-amber-300 rounded-lg text-center font-bold transition-colors flex items-center justify-center space-x-1 cursor-pointer shadow-sm"
+                title="Groq AI Hydro-Ecological Future Simulation"
               >
-                Simulation
+                <Zap className="w-3 h-3 text-amber-600 fill-amber-600" />
+                <span>AI Predict</span>
               </button>
               <button
                 onClick={() => setIsReportModalOpen(true)}

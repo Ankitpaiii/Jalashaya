@@ -53,18 +53,18 @@ export const LakeExplorerPanel: React.FC = () => {
   const selectedLakeObj = lakes.find((l) => l.id === selectedLakeId);
 
   return (
-    <aside className="absolute top-[62px] left-44 z-30 pointer-events-auto">
+    <aside className="absolute top-[66px] left-[120px] z-30 pointer-events-auto">
       {/* 1. Collapsed Floating Search Pill */}
       {!isExplorerOpen ? (
         <button
           onClick={() => setIsExplorerOpen(true)}
-          className="flex items-center space-x-2.5 bg-white/95 backdrop-blur-xl border border-slate-200/90 hover:border-sky-300 px-3.5 py-2 rounded-xl shadow-md hover:shadow-lg text-xs text-slate-800 transition-all group"
+          className="flex items-center space-x-2 bg-white/95 backdrop-blur-xl border border-slate-200/90 hover:border-sky-300 px-3 py-1.5 rounded-xl shadow-sm hover:shadow-md text-xs text-slate-800 transition-all group"
         >
           <Search className="w-3.5 h-3.5 text-sky-600 group-hover:scale-110 transition-transform" />
-          <span className="font-semibold text-slate-900">
-            {selectedLakeObj ? selectedLakeObj.official_name : 'Explore Lakes (185)'}
+          <span className="font-semibold text-slate-900 truncate max-w-[140px]">
+            {selectedLakeObj ? selectedLakeObj.official_name : 'Explore Lakes'}
           </span>
-          <span className="text-[10px] font-mono bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-bold border border-slate-200">
+          <span className="text-[10px] font-mono bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-bold border border-slate-200">
             {lakes.length}
           </span>
           <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700" />

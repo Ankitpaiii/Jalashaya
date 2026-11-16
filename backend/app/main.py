@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.core.config import settings
 from backend.app.core.database import engine, Base, SessionLocal
 from backend.app.repositories.lake_repository import LakeRepository
-from backend.app.api.endpoints import lakes, comparisons, restoration, reports, system
+from backend.app.api.endpoints import lakes, comparisons, restoration, reports, system, predictions, sar, research
 
 logging.basicConfig(level=settings.LOG_LEVEL)
 logger = logging.getLogger("jalashaya")
@@ -54,6 +54,9 @@ app.include_router(comparisons.router, prefix=api_v1_prefix)
 app.include_router(restoration.router, prefix=api_v1_prefix)
 app.include_router(reports.router, prefix=api_v1_prefix)
 app.include_router(system.router, prefix=api_v1_prefix)
+app.include_router(predictions.router, prefix=api_v1_prefix)
+app.include_router(sar.router, prefix=api_v1_prefix)
+app.include_router(research.router, prefix=api_v1_prefix)
 
 @app.get("/")
 def root():

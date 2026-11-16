@@ -56,15 +56,15 @@ export const LeftMenuDrawer: React.FC = () => {
 
   return (
     <>
-      {/* Floating Three Dots Trigger Button on the Left */}
-      <div className="absolute top-[62px] left-4 z-40">
+      {/* Floating Analytics Trigger Button on the Left */}
+      <div className="absolute top-[66px] left-4 z-40">
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center space-x-1.5 bg-white/95 hover:bg-white text-slate-800 border border-slate-200/90 shadow-md hover:shadow-lg rounded-xl px-2.5 py-2 text-xs font-semibold backdrop-blur-md transition-all group"
+          className="flex items-center space-x-1.5 bg-white/95 hover:bg-white text-slate-800 border border-slate-200/90 shadow-sm hover:shadow-md rounded-xl px-2.5 py-1.5 text-xs font-semibold backdrop-blur-md transition-all group"
           title="Open Dashboard Analysis & Restoration Simulation"
         >
-          <MoreVertical className="w-4 h-4 text-sky-600 group-hover:scale-110 transition-transform" />
-          <span className="hidden sm:inline text-slate-700">Analytics & Simulation</span>
+          <BarChart3 className="w-3.5 h-3.5 text-sky-600 group-hover:scale-110 transition-transform" />
+          <span className="hidden sm:inline text-slate-700">Analytics</span>
         </button>
       </div>
 
